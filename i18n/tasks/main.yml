@@ -1,0 +1,6 @@
+- name: install libselinux-python
+  yum: name=libselinux-python state=present
+
+- name: copy i18n
+  template: src=i18n.j2 dest=/etc/sysconfig/i18n mode=0644
+
