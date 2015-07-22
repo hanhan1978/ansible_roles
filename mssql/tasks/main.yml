@@ -1,0 +1,14 @@
+- name: Install EPEL repo.
+  yum: name=epel-release state=present
+
+- name: Install mssql related libs
+  yum: name={{ item }} state=present
+  with_items: 
+    - git 
+    - freetds-devel 
+    - readline-devel 
+    - subversion
+    - cmake
+    - autoconf
+    - automake
+    - libtool
