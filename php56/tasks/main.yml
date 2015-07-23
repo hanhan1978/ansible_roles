@@ -21,3 +21,20 @@
   command: "{{item}}"
   with_items:
     - mv composer.phar /usr/bin/composer 
+
+- name: laravel installer
+  command: composer global require "laravel/installer=~1.1"
+  sudo: no
+
+- name: add composer path 
+  shell: echo "export PATH=$PATH:~/.composer/vendor/bin" >> ~/.bash_profile
+  sudo: no
+
+- name: copy php-fpm conf 
+  template: src=www.conf.j2 dest=/opt/remi/php56/root/etc/php-fpm.d/www.conf mode=0644
+
+- name: restart php-fpm 
+  service: name=php56-php-fpm state=restarted
+
+- name: chkconfig php-fpm 
+  command: chkconfig php56-php-fpm on
