@@ -1,0 +1,15 @@
+- name: install epel repo.
+  yum: name=http://rpms.famillecollet.com/enterprise/remi-release-6.rpm state=present
+
+- name: Install php56 
+  yum: name={{ item }} state=present enablerepo=remi
+  with_items: 
+    - php56 
+    - php56-xhprof 
+    - php56-php-pdo
+    - php56-php-mysqlnd
+    - php56-php-mbstring
+    - php56-php-fpm
+
+- name: symlink 
+  command: ln -s /usr/bin/php56 /usr/bin/php 
