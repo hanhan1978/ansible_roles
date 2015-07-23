@@ -12,4 +12,12 @@
     - php56-php-fpm
 
 - name: symlink 
-  command: ln -s /usr/bin/php56 /usr/bin/php 
+  command: ln -fs /usr/bin/php56 /usr/bin/php 
+
+- name: install composer 
+  shell: curl -sS https://getcomposer.org/installer | php 
+
+- name: move composer 
+  command: "{{item}}"
+  with_items:
+    - mv composer.phar /usr/bin/composer 
