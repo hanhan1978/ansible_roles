@@ -7,11 +7,14 @@
 - name: copy ntp.conf 
   template: src=ntp.conf.j2 dest=/etc/ntp.conf mode=0644
 
+- name: stop ntp if started
+  service: name=ntpd state=stopped
+
 - name: manual ntp
   command: ntpdate clock.nc.fukuoka-u.ac.jp
 
 - name: restart ntpd
-  service: name=ntpd state=restarted
+  service: name=ntpd state=started
 
 - name: chkconfig ntpd 
   command: chkconfig ntpd on
