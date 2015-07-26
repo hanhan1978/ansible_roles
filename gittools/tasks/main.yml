@@ -1,0 +1,37 @@
+- command: /usr/bin/test -f /home/vagrant/.git-prompt.sh 
+  register: has_downloaded 
+  ignore_errors: True
+
+- name: get git-completion
+  get_url:
+    url="https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash"
+    dest="/home/vagrant/.git-completion.bash"
+  when: has_downloaded|failed
+
+- name: get git-propmt
+  get_url:
+    url="https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh"
+    dest="/home/vagrant/.git-prompt.sh"
+  when: has_downloaded|failed
+
+- file: path=/home/vagrant/.git-completion.bash owner=vagrant group=vagrant state=file
+  when: has_downloaded|failed
+
+- file: path=/home/vagrant/.git-prompt.sh owner=vagrant group=vagrant state=file
+  when: has_downloaded|failed
+
+- file: path=/home/vagrant/.bash.d state=directory owner=vagrant group=vagrant
+  when: has_downloaded|failed
+
+- template: src=git_prompt.sh.j2 dest=/home/vagrant/.bash.d/git_prompt.sh mode=0766 owner=vagrant group=vagrant
+  when: has_downloaded|failed
+
+- shell: |
+    echo "if [ -d ~/.bash.d ] ; then
+    for f in ~/.bash.d/*.sh ; do
+        [ -x \"\$f\" ] && . \"\$f\"
+    done
+    unset f
+    fi" >> /home/vagrant/.bash_profile
+  when: has_downloaded|failed
+
