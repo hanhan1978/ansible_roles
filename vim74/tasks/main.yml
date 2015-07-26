@@ -1,0 +1,30 @@
+
+
+- name: Install related libs 
+  yum: name={{ item }} state=present
+  with_items: 
+    - gcc
+    - python
+    - python-devel
+    - ncurses-devel
+    - python-setuptools
+    - perl-ExtUtils-Embed
+
+- name: clone 
+  command: git clone https://github.com/vim/vim.git "{{vim_srcdir}}"
+  args:
+    chdir: "{{local_srcdir}}"
+
+- name: make 
+  command: "{{item}}"
+  args:
+    chdir: "{{local_srcdir}}"/"{{vim_srcdir}}"
+  with_items:
+    - ./configure --prefix="{{install_dir}}" "{{configure_opt1}}" "{{configure_opt2}}"
+    - make
+    - make install
+
+- name: path
+  shell: echo "PATH={{install_dir}}/bin:$PATH" >> ~/.bash_profile 
+  sudo: no
+

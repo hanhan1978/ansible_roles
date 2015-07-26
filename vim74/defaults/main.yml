@@ -1,0 +1,5 @@
+configure_opt1: '--enable-fail-if-missing  --enable-fontset --enable-perlinterp --enable-pythoninterp --enable-cscope --enable-multibyte'
+configure_opt2: '--with-x=no  --disable-gui --disable-xim --with-features=huge --disable-selinux --disable-gpm --disable-darwin'
+local_srcdir: '/usr/local/src'
+vim_srcdir: 'vim74'
+install_dir: '/usr/local/vim'
