@@ -1,0 +1,28 @@
+- command: /usr/bin/test -f /vagrant/wordpress-4.2.2-ja.tar.gz 
+  register: has_downloaded
+  ignore_errors: True
+
+- name: get wordpress
+  get_url:
+    url="https://ja.wordpress.org/wordpress-4.2.2-ja.tar.gz"
+    dest="/vagrant"
+  when: has_downloaded|failed
+
+- command: /usr/bin/test -d /vagrant/wordpress-4.2.2-ja 
+  register: has_decomposed 
+  ignore_errors: True
+
+- name: defrost
+  command: tar xzf wordpress-4.2.2-ja.tar.gz
+  args:
+    chdir: "/vagrant"
+  when: has_decomposed|failed
+
+
+- name: Install mysql 
+  yum: name={{ item }} state=present
+  with_items: 
+    - mysql-server 
+    - mysql-devel
+
+
