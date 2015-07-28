@@ -1,3 +1,6 @@
+- name: Install libselinux-python
+  yum: name=libselinux-python state=present
+
 - command: /usr/bin/test -f /vagrant/{{wp_version}}.tar.gz 
   register: has_downloaded
   ignore_errors: True
@@ -16,6 +19,10 @@
   command: tar xzf {{wp_version}}.tar.gz
   args:
     chdir: "/vagrant"
+  when: has_decomposed|failed
+
+- name: copy wp-config 
+  template: src=wp-config.php dest=/vagrant/wordpress/wp-config.php mode=0644
   when: has_decomposed|failed
 
 - name: Install mysql 
@@ -44,10 +51,26 @@
     - php-mbstring
     - php-fpm
 
-- name: Install libselinux-python
-  yum: name={{ item }} state=present
-  with_items: 
-    - libselinux-python
+- name: restart php-fpm
+  service: name=php-fpm state=restarted
+
+- name: chkconfig php-fpm
+  command: chkconfig php-fpm on
+
+- name: install nginx rpm
+  yum: name=http://nginx.org/packages/centos/6/noarch/RPMS/nginx-release-centos-6-0.el6.ngx.noarch.rpm state=present
+
+- name: install nginx
+  yum: name=nginx state=present
 
 - name: copy nginx default_config 
   template: src=default.conf.j2 dest=/etc/nginx/conf.d/default.conf mode=0644
+
+- name: restart nginx
+  service: name=nginx state=restarted
+
+- name: chkconfig nginx
+  command: chkconfig nginx on
+
+- name: disable selinux 
+  command: setenforce 0 
