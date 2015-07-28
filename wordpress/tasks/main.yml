@@ -72,5 +72,8 @@
 - name: chkconfig nginx
   command: chkconfig nginx on
 
-- name: disable selinux 
-  command: setenforce 0 
+- selinux: state=disabled
+
+- name: insert iptables rule
+  lineinfile: dest=/etc/sysconfig/iptables state=present regexp="80"
+              insertafter="^:OUTPUT " line="-A INPUT -p tcp --dport 80 -j ACCEPT"
