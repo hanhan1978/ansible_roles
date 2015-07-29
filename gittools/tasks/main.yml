@@ -26,12 +26,25 @@
 - template: src=git_prompt.sh.j2 dest=/home/vagrant/.bash.d/git_prompt.sh mode=0766 owner=vagrant group=vagrant
   when: has_downloaded|failed
 
-- shell: |
-    echo "if [ -d ~/.bash.d ] ; then
-    for f in ~/.bash.d/*.sh ; do
-        [ -x \"\$f\" ] && . \"\$f\"
-    done
-    unset f
-    fi" >> /home/vagrant/.bash_profile
+- lineinfile:
+    dest=~/.bash_profile state=present
+    line= "if [ -d ~/.bash.d ] ; then for f in ~/.bash.d/*.sh ; do [ -x \"\$f\" ] && . \"\$f\" done unset f fi"
+  sudo: no
   when: has_downloaded|failed
+
+- name: Install git 
+  yum: name=git state=present
+
+- name: clone 
+  git: repo=git@github.com:hanhan1978/junks.git dest="~/junks"
+  sudo: no
+
+- file: src="~/junks/dotfiles/.vimrc" dest="~/.vimrc" state=link
+  sudo: no
+
+- file: dest="~/.vim/bundle" state=directory
+  sudo: no
+
+- git: repo=https://github.com/Shougo/neobundle.vim dest="~/.vim/bundle/neobundle.vim"
+  sudo: no
 
