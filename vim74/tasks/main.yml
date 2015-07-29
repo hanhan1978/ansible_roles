@@ -28,3 +28,5 @@
     - make
     - make install
   when: vim_bin|failed
+
+- file: src="{{install_dir}}/bin/vim" dest="{{install_dir}}/bin/vi" state=link
