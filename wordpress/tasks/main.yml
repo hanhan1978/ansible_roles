@@ -50,6 +50,7 @@
     - php-mysql
     - php-mbstring
     - php-fpm
+    - php-xml
 
 - name: restart php-fpm
   service: name=php-fpm state=restarted
