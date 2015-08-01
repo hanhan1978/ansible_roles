@@ -1,7 +1,8 @@
 - name: Install libselinux-python
   yum: name=libselinux-python state=present
 
-- command: /usr/bin/test -f /vagrant/{{wp_version}}.tar.gz 
+- name: Download wordpress
+  command: /usr/bin/test -f /vagrant/{{wp_version}}.tar.gz 
   register: has_downloaded
   ignore_errors: True
 
