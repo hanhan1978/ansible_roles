@@ -16,4 +16,4 @@
     - libselinux-python
 
 - name: copy nginx default_config 
-  template: src=default.conf.j2 dest=/etc/nginx/conf.d/default.conf mode=0644
+  template: src=default{{ conf_type | default('') }}.conf.j2 dest=/etc/nginx/conf.d/default.conf mode=0644

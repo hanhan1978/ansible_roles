@@ -2,8 +2,8 @@
 
 ;prefix = /path/to/pools/$pool
 
-user = apache
-group = apache
+user = {{ phpfpm_user | default('nginx') }}
+group = {{ phpfpm_group | default('nginx') }}
 
 ;listen = 127.0.0.1:9000
 listen = /var/run/php56-fpm.sock 

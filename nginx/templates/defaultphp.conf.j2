@@ -2,7 +2,7 @@ server {
     listen       80;
     server_name  localhost;
 
-    root  /vagrant/baseapp/public;
+    root  {{ doc_root | default('/vagrant/baseapp/public') }};
     index index.php index.html index.htm;
 
     location / {
