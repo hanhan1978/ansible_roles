@@ -11,7 +11,7 @@
   service: name=ntpd state=stopped
 
 - name: manual ntp
-  command: ntpdate clock.nc.fukuoka-u.ac.jp
+  command: ntpdate ntp.nict.jp 
 
 - name: restart ntpd
   service: name=ntpd state=started
