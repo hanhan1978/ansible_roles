@@ -1,6 +1,12 @@
 - name: install libselinux-python
   yum: name=libselinux-python state=present
 
+- name: install japanese support
+  yum: name="@Japanese Support"
+
+- name: add locake
+  command: localedef -f UTF-8 -i ja_JP ja_JP.utf8
+
 - name: copy i18n
   template: src=i18n.j2 dest=/etc/sysconfig/i18n mode=0644
 
