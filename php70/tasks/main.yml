@@ -1,0 +1,18 @@
+
+- name: install remi repo.
+  yum: name=http://rpms.famillecollet.com/enterprise/remi-release-6.rpm state=present
+
+- name: Install php70 
+  yum: name={{ item }} state=present enablerepo=remi,remi-test
+  with_items: 
+    - php70 
+    - php70-php-pdo
+    - php70-php-mysqlnd
+    - php70-php-mbstring
+    - php70-php-fpm
+
+- name: symlink 
+  command: ln -fs /usr/bin/php70 /usr/bin/php 
+
+- name: copy php-fpm conf 
+  template: src=www.conf.j2 dest=/etc/opt/remi/php70/php-fpm.d/www.conf mode=0644
